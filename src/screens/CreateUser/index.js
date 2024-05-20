@@ -1,29 +1,53 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
-import React, {useState} from 'react'
-import styles from './style'
 
-export default function CreateUser() {
+import React, { useState } from 'react'
+import { firebase } from '../../services/firebaseConfig'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import styles from './style'
+import {getDatabase, ref, set} from 'firebase/database'
+const db = getDatabase();
+
+export default function CreateUser({navigation}) {
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
+    const [password, setPassword] = useState("")
     const [errorCreateUser, setErrorCreateUser] = useState(null)
 
-    function validate(){
-        if(nome ==""){
+    function validate() {
+        if (nome == "") {
             setErrorCreateUser("Informe seu nome")
-        }else if(email == ""){
+        } else if (email == "") {
             setErrorCreateUser("Informe seu email")
-        }else if(senha == ""){
+        } else if (password == "") {
             setErrorCreateUser("Informe seu senha")
-        }else{
-            setErrorCreateUser (null)
+        } else {
+            setErrorCreateUser(null)
+            createUser();
         }
-    } 
+    }
+
+    const createUser = () => {
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                set(ref(db, 'users/' +user.uid), {
+                    username: nome,
+                    email: email,
+                  })
+                navigation.navigate('Tabs')
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+                setErrorCreateUser(errorMessage)
+            });
+    }
 
     return (
         <View style={styles.container}>
-           
-
+        
             <TextInput
                 style={styles.input}
                 placeholder='Nome'
@@ -42,8 +66,8 @@ export default function CreateUser() {
                 style={styles.input}
                 secureTextEntry={true}
                 placeholder='Senha'
-                value={senha}
-                onChangeText={setSenha}
+                value={password}
+                onChangeText={setPassword}
             />
 
             <TouchableOpacity
@@ -52,7 +76,7 @@ export default function CreateUser() {
             >
                 <Text style={styles.textButton}>Criar usuário</Text>
             </TouchableOpacity>
-             {errorCreateUser != null && (
+            {errorCreateUser != null && (
                 <Text style={styles.alert}>{errorCreateUser}</Text>
             )}
         </View>
