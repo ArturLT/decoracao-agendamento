@@ -1,27 +1,28 @@
+
 import React, { useState } from 'react'
 import { firebase } from '../../services/firebaseConfig'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import styles from './style'
+import {getDatabase, ref, set} from 'firebase/database'
 const db = getDatabase();
 
-export default function CreateUser({ navigation }) {
+export default function CreateUser({navigation}) {
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [errorCreateUser, setErrorCreateUser] = useState(null)
 
-    const validate = () => {
+    function validate() {
         if (nome == "") {
             setErrorCreateUser("Informe seu nome")
         } else if (email == "") {
-            setErrorCreateUser("Informe seu e-mail")
+            setErrorCreateUser("Informe seu email")
         } else if (password == "") {
-            setErrorCreateUser("Informe uma senha")
+            setErrorCreateUser("Informe seu senha")
         } else {
             setErrorCreateUser(null)
-            createUser()
+            createUser();
         }
     }
 
@@ -30,27 +31,23 @@ export default function CreateUser({ navigation }) {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                set(ref(db, 'users/' + user.uid), {
-                    nome: nome,
-                    email: email
-                });
-
+                set(ref(db, 'users/' +user.uid), {
+                    username: nome,
+                    email: email,
+                  })
                 navigation.navigate('Tabs')
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+                // ..
                 setErrorCreateUser(errorMessage)
             });
-
     }
 
     return (
         <View style={styles.container}>
-            {errorCreateUser != null && (
-                <Text style={styles.alert}>{errorCreateUser}</Text>
-            )}
-
+        
             <TextInput
                 style={styles.input}
                 placeholder='Nome'
@@ -79,6 +76,9 @@ export default function CreateUser({ navigation }) {
             >
                 <Text style={styles.textButton}>Criar usuário</Text>
             </TouchableOpacity>
+            {errorCreateUser != null && (
+                <Text style={styles.alert}>{errorCreateUser}</Text>
+            )}
         </View>
     )
 }

@@ -1,55 +1,40 @@
-import React, { useEffect, useState } from 'react'
 import { firebase } from '../../services/firebaseConfig'
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
+import React, { useState } from 'react'
 import styles from './style'
 
 export default function Login({ navigation }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [errorLogin, setErrorLogin] = useState(null)
+    const [errorLogin, setErrorLogin] = useState("")
 
-    const validate = () => {
+    function validade() {
         if (email == "") {
-            setErrorLogin("Informe seu e-mail")
+            setErrorLogin("Informe um e-mail!")
         } else if (password == "") {
-            setErrorLogin("Informe uma senha")
+            setErrorLogin("Informe a senha!")
         } else {
             setErrorLogin(null)
             login()
         }
     }
 
-    const auth = getAuth();
-    const login = () => {
+    function login() {
+        const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                // Signed in 
                 const user = userCredential.user;
-                setEmail("")
-                setPassword("")
-                setErrorLogin(null)
                 navigation.navigate('Tabs')
+                // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                setErrorLogin(errorMessage);
+                setErrorLogin(errorMessage)
             });
-    }
-
-    const verificarLogin = () => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                navigation.navigate('Tabs');
-            } else {
-            }
-        });
-    }
-
-    useEffect(() => {
-        verificarLogin();
-    }, [])
+        }
 
     return (
         <View style={styles.container}>
@@ -69,14 +54,13 @@ export default function Login({ navigation }) {
             <TextInput
                 style={styles.input}
                 placeholder='Senha'
-                secureTextEntry={true}
                 value={password}
                 onChangeText={setPassword}
+                secureTextEntry={true}
             />
 
             <TouchableOpacity style={styles.button}
-                onPress={validate}
-            >
+                onPress={validade}>
                 <Text style={styles.textButton}>Entrar</Text>
             </TouchableOpacity>
 

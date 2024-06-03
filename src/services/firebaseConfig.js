@@ -5,16 +5,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDxHuwoghZFtcoo8Zs3gtr5NThnjJD0cpA",
-  authDomain: "pra-fazer-app---teste.firebaseapp.com",
-  projectId: "pra-fazer-app---teste",
-  storageBucket: "pra-fazer-app---teste.appspot.com",
-  messagingSenderId: "833869906364",
-  appId: "1:833869906364:web:f96bb4f319a427bedc2bb9"
+  apiKey: "AIzaSyCH1nrK7NBUzYjummZaiskz6GdpC_vOA-E",
+  authDomain: "para-fazer-app-d8dc6.firebaseapp.com",
+  projectId: "para-fazer-app-d8dc6",
+  storageBucket: "para-fazer-app-d8dc6.appspot.com",
+  messagingSenderId: "479009855529",
+  appId: "1:479009855529:web:ca1502dd7d0207e59d6438"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// export default app;
-
