@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
                 // Signed in 
                 const user = userCredential.user;
                 navigation.navigate('Tabs')
-                // ...
+                
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -35,10 +35,11 @@ export default function Login({ navigation }) {
                 setErrorLogin(errorMessage)
             });
         }
-
+//<Image style={styles.logo} source={require('../../../assets/logo.png')} /> colocar na linha 42
     return (
         <View style={styles.container}>
-            <Image style={styles.logo} source={require('../../../assets/logo_pra_fazer.png')} />
+            
+           
 
             {errorLogin != null && (
                 <Text style={styles.alert}>{errorLogin}</Text>

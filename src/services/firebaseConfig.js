@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCH1nrK7NBUzYjummZaiskz6GdpC_vOA-E",
-  authDomain: "para-fazer-app-d8dc6.firebaseapp.com",
-  projectId: "para-fazer-app-d8dc6",
-  storageBucket: "para-fazer-app-d8dc6.appspot.com",
-  messagingSenderId: "479009855529",
-  appId: "1:479009855529:web:ca1502dd7d0207e59d6438"
+  apiKey: "AIzaSyAZ2asY4s38_8lzy8YsuFzdyxxa92owB4g",
+  authDomain: "decoracoes-agendamento.firebaseapp.com",
+  projectId: "decoracoes-agendamento",
+  storageBucket: "decoracoes-agendamento.appspot.com",
+  messagingSenderId: "73082403827",
+  appId: "1:73082403827:web:9b2b9ebf8c632abfb17086"
 };
 
 // Initialize Firebase
