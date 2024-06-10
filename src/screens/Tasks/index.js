@@ -70,7 +70,7 @@ export default function Tasks({ navigation }) {
                 </View>
             </Modal>
 
-            {/* Compoente para listar tarefas recupedas do banco */}
+            {/* Componente para listar tarefas recuperadas do banco */}
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={tasks}
@@ -78,18 +78,37 @@ export default function Tasks({ navigation }) {
                     <View style={styles.tarefa}>
                         <View>
                             <Text style={styles.data}>{item.date}</Text>
-                            <Text style={styles.descricao}>{item.description}</Text>
+                            <Text style={styles.descricao}>{item.evento}</Text>
+                            {/* Texto para representar a imagem a ser substituída */}
+                            {/* Verifica se item.material é uma matriz antes de tentar mapeá-la */}
+                            {Array.isArray(item.material) && item.material.map((material, index) => (
+                                <View style={styles.materialContainer} key={index}>
+                                    <Text style={styles.materialText}>{material}</Text>
+                                    <TouchableOpacity onPress={() => deleteMaterial(item.id, index)}>
+                                        <Text style={styles.removeButtonText}>Remover</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
                         </View>
+
                         <View style={styles.action}>
+                            {/* Botão para editar tarefa */}
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('EditTask', { id: item.id })}
                             >
                                 <Text style={styles.descricao}><MaterialCommunityIcons name="file-document-edit-outline" size={32} /></Text>
                             </TouchableOpacity>
+                            {/* Botão para deletar tarefa */}
                             <TouchableOpacity
                                 onPress={() => deleteTask(item.id)}
                             >
                                 <Text style={styles.descricao}><MaterialCommunityIcons name="delete-outline" size={32} /></Text>
+                            </TouchableOpacity>
+                            {/* Botão adicional para visualizar tarefa */}
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('ViewTask', { id: item.id })}
+                            >
+                                <Text style={styles.descricao}><MaterialCommunityIcons name="eye-outline" size={32} /></Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -97,7 +116,7 @@ export default function Tasks({ navigation }) {
             />
 
             {/* Botão para abrir tela de criar tarefa */}
-            {/* Este botão fica flutuando no canto inferir direito da tela */}
+            {/* Este botão fica flutuando no canto inferior direito da tela */}
             <TouchableOpacity
                 style={styles.buttonCreate}
                 onPress={() => navigation.navigate('CreateTask')}

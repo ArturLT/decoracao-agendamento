@@ -1,8 +1,9 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+
     container: {
-        backgroundColor: "#F60",
+        backgroundColor: '#707070',
         padding: 30,
         flex: 1,
         width: '100%',
@@ -21,20 +22,102 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         padding: 20,
         marginBottom: 20,
-        width: '100%'
+        width: '100%',
     },
     button: {
-        backgroundColor: '#070A52',
-        padding: 10,
-        borderRadius: 10,
+        backgroundColor: '#084d6e',
+        padding: 15,
+        borderRadius: 20,
         marginBottom: 20,
-        width: '100%'
+        width: '100%',
     },
     textButton: {
         fontSize: 24,
         textAlign: 'center',
+        color: '#fff',
+    },
+    addButton: {
+        backgroundColor: '#123449',
+        padding: 15,
+        borderRadius: 20,
+        marginBottom: 20,
+        width: '100%',
+    },
+    addButtonText: {
+        fontSize: 24,
+        textAlign: 'center',
+        color: '#fff',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 20,
+        marginBottom: 20,
+    },
+    materialOption: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    materialOptionText: {
+        fontSize: 18,
+    },
+    closeButton: {
+        backgroundColor: '#070A52',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    closeButtonText: {
+        color: '#fff',
+        fontSize: 18,
+    }, 
+    materialTab: {
+        flexDirection: 'row', // Adicionando flex direction row
+        alignItems: 'center', // Alinhar itens verticalmente ao centro
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        marginBottom: 20,
+        padding: 10,
+        width: 660,
+    },
+    materialText: {
+        flex: 1, // Ocupa todo o espaço disponível
+        fontSize: 18,
+        color: '#000', // Cinza com 70% de transparência
+    },
+    removeButton: {
+        backgroundColor: '#123449', // Cor vermelha
+        padding: 10,
+        borderRadius: 10,
+        marginLeft: 10, // Adicionando margem à esquerda para separar o botão do texto
+    },
+    removeButtonText: {
+        fontSize: 18,
+        color: '#fff',
+    },
+    materialPicker: {
+        fontSize: 18,
+        color: 'rgba(128, 128, 128, 0.7)', // Cinza com 70% de transparência
+        width: '100%',
+    },
+    addButtonText: {
+        fontSize: 18,
+        textAlign: 'center',
         color: '#fff'
-    }
+    },
+
 });
 
-export default styles
+export default styles;

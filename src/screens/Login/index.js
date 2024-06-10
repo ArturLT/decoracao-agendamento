@@ -39,7 +39,7 @@ export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             
-           
+            <Image style={styles.logo} source={require('../../../assets/logo.png')} />
 
             {errorLogin != null && (
                 <Text style={styles.alert}>{errorLogin}</Text>

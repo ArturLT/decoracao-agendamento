@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     button: {
         padding: 10,
         borderWidth: 1,
-        borderColor: '#F60',
+        borderColor: '#084d6e',
         borderRadius: 10,
         marginBottom: 20,
         width: '100%'
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 18,
         textAlign: 'center',
-        color: '#F60'
+        color: '#084d6e'
     }
 })
 

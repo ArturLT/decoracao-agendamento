@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     },
 
     data: {
-        color: '#F60'
+        color: '#084d6e'
     },
 
     descricao: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
 
     buttonCreate: {
-        backgroundColor: '#F60',
+        backgroundColor: '#707070',
         width: 60,
         height: 60,
         borderRadius: 50,

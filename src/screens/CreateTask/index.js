@@ -1,68 +1,163 @@
-import { firebase } from '../../services/firebaseConfig'
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, FlatList, Platform } from 'react-native';
 import { getDatabase, push, ref, set } from "firebase/database";
-import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native'
 import { getAuth } from "firebase/auth";
-import React, { useState } from 'react'
-import styles from './style'
+import { firebase } from '../../services/firebaseConfig';
+import styles from './style';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 const db = getDatabase();
 const auth = getAuth();
 
 export default function CreateTask({ navigation }) {
-    const [date, setDate] = useState("")
-    const [description, setDescription] = useState("")
-    const [errorCreateTask, setErrorCreateTask] = useState(null)
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [evento, setEvento] = useState("");
+    const [local, setLocal] = useState("");
+    const [selectedMaterials, setSelectedMaterials] = useState([]);
+    const [showMaterialPicker, setShowMaterialPicker] = useState(false);
+    const [errorCreateTask, setErrorCreateTask] = useState(null);
+
+    const materials = ["Moveis", "Arranjos", "Ornamentação", "Buffet", "Som", "Brinquedos"];
 
     const validate = () => {
-        if (date == "") {
-            setErrorCreateTask("Informe a data da tarefa")
-        } else if (description == "") {
-            setErrorCreateTask("Informe a descrição da tareja")
+        if (!date) {
+            setErrorCreateTask("Informe a data da festa");
+        } else if (evento === "") {
+            setErrorCreateTask("Informe o tema festa");
+        } else if (local === "") {
+            setErrorCreateTask("Informe o local da festa");
+        } else if (selectedMaterials.some(material => material === "")) {
+            setErrorCreateTask("Selecione todos os materiais para a tarefa");
         } else {
-            setErrorCreateTask(null)
-            createTask()
+            setErrorCreateTask(null);
+            createTask();
         }
     }
 
-    // Função para criar terefa no banco
     const createTask = () => {
-        // Obtem a referência do nó "tasks" do usuário que tá logado
-        // "auth.currentUser.uid" é o id o usuário no banco
         const taskListRef = ref(db, 'tasks/' + auth.currentUser.uid);
-        // Define uma id para a nova tarefa
         const newTaskRef = push(taskListRef);
-        // Cria a tarefa no banco
         set(newTaskRef, {
-            date: date,
-            description: description
+            date: date.toISOString().split('T')[0],
+            evento: evento,
+            local: local,
+            materials: selectedMaterials
         });
-        navigation.navigate('Tabs')
+        navigation.navigate('Tabs');
     }
+
+    const addMaterial = (material) => {
+        if (!selectedMaterials.includes(material)) {
+            setSelectedMaterials([...selectedMaterials, material]);
+        } else {
+            setErrorCreateTask(`"${material}" já foi selecionado.`);
+        }
+    }
+
+    const removeMaterial = (index) => {
+        const updatedMaterials = [...selectedMaterials];
+        updatedMaterials.splice(index, 1);
+        setSelectedMaterials(updatedMaterials);
+    }
+
+    const handleDateChange = (event, selectedDate) => {
+        if (selectedDate) {
+            // Ajuste a data para considerar o fuso horário local
+            const adjustedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
+            setDate(adjustedDate);
+        }
+        setShowDatePicker(false);
+    };
 
     return (
         <View style={styles.container}>
-            {errorCreateTask != null && (
+            {errorCreateTask && (
                 <Text style={styles.alert}>{errorCreateTask}</Text>
+            )}
+
+            <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+                <Text>{date.toISOString().split('T')[0]}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+                <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
+                />
             )}
 
             <TextInput
                 style={styles.input}
-                placeholder='Data'
-                value={date}
-                onChangeText={setDate}
+                placeholder='Tema da Festa'
+                value={evento}
+                onChangeText={setEvento}
             />
-
             <TextInput
                 style={styles.input}
-                placeholder='Descrição'
-                value={description}
-                onChangeText={setDescription}
+                placeholder='Local da Festa'
+                value={local}
+                onChangeText={setLocal}
             />
+
+            <ScrollView>
+                {selectedMaterials.map((material, index) => (
+                    <View key={index} style={styles.materialTab}>
+                        <Text style={styles.materialText}>{material}</Text>
+                        <TouchableOpacity onPress={() => removeMaterial(index)} style={styles.removeButton}>
+                            <Text style={styles.removeButtonText}>Remover</Text>
+                        </TouchableOpacity>
+                    </View>
+                ))}
+            </ScrollView>
+
+            <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setShowMaterialPicker(true)}
+            >
+                <Text style={styles.addButtonText}>Adicionar Material</Text>
+            </TouchableOpacity>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showMaterialPicker}
+                onRequestClose={() => setShowMaterialPicker(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Selecione um Material</Text>
+                        <FlatList
+                            data={materials}
+                            keyExtractor={(item) => item}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    style={styles.materialOption}
+                                    onPress={() => {
+                                        addMaterial(item);
+                                        setShowMaterialPicker(false);
+                                    }}
+                                >
+                                    <Text style={styles.materialOptionText}>{item}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setShowMaterialPicker(false)}
+                        >
+                            <Text style={styles.closeButtonText}>Fechar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
 
             <TouchableOpacity
                 style={styles.button}
                 onPress={validate}
             >
-                <Text style={styles.textButton}>Criar tarefa</Text>
+                <Text style={styles.textButton}>Agendar Festa</Text>
             </TouchableOpacity>
         </View>
     )
